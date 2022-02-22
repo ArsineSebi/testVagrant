@@ -23,7 +23,7 @@ jobs:
             vm_list=[]
             for i in data:
               vm_list.append(i["name"])
-            print(f"::set-output name=version_matrix::{vm_list}")
+            print(f"::set-output name=version_matrix::{vm_list}" | jq .)
             #run: echo "::set-output name=version_matrix::$(ls|jq -cnR '[inputs | select(length>0)]')"
           
         shell: python
@@ -32,12 +32,10 @@ jobs:
     needs: build-matrix
     name: test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        versions: ${{fromJson(needs.build-matrix.outputs.version_matrix)}}
     steps:
-      - name : AA
-        run: |
-          param=${{ needs.build-matrix.outputs.version_matrix}}
-          echo ${param}
-    #strategy:
-      #matrix:
-        #versions: $param
+      - run: echo ${{ needs.build-matrix.outputs.version_matrix}}
+
 
