@@ -9,13 +9,13 @@ on:
 jobs:
   Test:
     name: Test Salt
-    runs-on: macos-10.15
-    strategy:
-      matrix:
-        image:
-          - 'ubuntu2004'
-          - 'centos7'
-          - 'centos8'
+    runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         image:
+#           - 'ubuntu2004'
+#           - 'centos7'
+#           - 'centos8'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,7 +24,9 @@ jobs:
       - name: Read File
         run: |
           import yaml
+          
           with open('servers.yaml') as file:
             data = yaml.load(file, Loader=yaml.FullLoader)
           print(data)
+          
         shell: python
