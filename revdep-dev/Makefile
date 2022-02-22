@@ -1,0 +1,7 @@
+---
+  package:
+    - "RMariaDB"
+    - "RSQLite"
+    - "RPostgres"
+    - "RKazam"
+    - "duckdb"
