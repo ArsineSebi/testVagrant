@@ -24,7 +24,7 @@ jobs:
       - name: Read File
         run: |
           import yaml
-          with open(r'servers.yaml') as file:
+          with open('servers.yaml') as file:
           data = yaml.load(file, Loader=yaml.FullLoader)
           print(data)
         shell: python
