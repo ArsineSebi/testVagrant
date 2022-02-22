@@ -45,14 +45,12 @@ jobs:
           echo $matrix | jq .
           echo "::set-output name=matrix::$matrix"
 
-  Test:
+  test:
     needs: matrix
-    name: test
     runs-on: ubuntu-latest
     #strategy:
-      #matrix:
-        #versions: ${{fromJson(needs.matrix.outputs.matrix)}}
+      #matrix: ${{fromJson(needs.matrix.outputs.matrix)}}
     steps:
-      - run: echo ${{ needs.build-matrix.outputs.version_matrix}}
+      - run: echo ${{ needs.matrix.outputs.matrix}}
 
 
