@@ -36,7 +36,7 @@ jobs:
       - name : AA
         run: |
           param=${{ needs.build-matrix.outputs.version_matrix}}
-          echo $param
+          echo "$param"
     #strategy:
       #matrix:
         #versions: $param
