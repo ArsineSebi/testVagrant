@@ -4,7 +4,7 @@ name: SaltStack
 on:
   push:
     branches:
-      - develop
+      - test
 
 jobs:
   Test:
