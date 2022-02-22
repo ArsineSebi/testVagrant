@@ -21,10 +21,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Create ${{ matrix.image }}
+      - name: Read File
         run: |
-          vagrant up ${{ matrix.image }}
-      - name: Cleanup
-        if: always()
-        run: |
-          vagrant destroy ${{ matrix.image }} -f
+          import yaml
+          with open(r'servers.yaml') as file:
+          data = yaml.load(file, Loader=yaml.FullLoader)
+          print(data)
+        shell: python
