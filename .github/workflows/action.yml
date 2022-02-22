@@ -29,8 +29,7 @@ jobs:
             data = yaml.load(file, Loader=yaml.FullLoader)
           vm_list=[]
           for i in data:
-          vm_list.append(i["name"])
+            vm_list.append(i["name"])
           print(vm_list)
-          print(data)
           
         shell: python
