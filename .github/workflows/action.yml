@@ -23,8 +23,8 @@ jobs:
             vm_list=[]
             for i in data:
               vm_list.append(i["name"])
-            #print(f"::set-output name=version_matrix::{vm_list}")
-            run: echo "::set-output name=version_matrix::$(ls|jq -cnR '[inputs | select(length>0)]')"
+            print(f"::set-output name=version_matrix::{vm_list}")
+            #run: echo "::set-output name=version_matrix::$(ls|jq -cnR '[inputs | select(length>0)]')"
           
         shell: python
 
