@@ -30,7 +30,7 @@ jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ toJSON(steps.set-matrix.outputs.matrix) }}
+      matrix: ${{steps.set-matrix.outputs.matrix}}
     steps:
       - uses: actions/checkout@v2
 
@@ -48,8 +48,10 @@ jobs:
   test:
     needs: matrix
     runs-on: ubuntu-latest
-    #strategy:
-      #matrix: ${{fromJSON(needs.matrix.outputs.matrix)}}
+    strategy:
+      fail-fast: false
+      #matrix: ${{fromJson(needs.matrix.outputs.matrix)}}
+      #matrix: ${{fromJson(   {"A":["ana","are","mere"]}  )}}
     steps:
       - run: echo ${{ needs.matrix.outputs.matrix}}
 
