@@ -32,7 +32,12 @@ jobs:
     needs: build-matrix
     name: test
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{fromJson(needs.build-matrix.outputs.version_matrix)}}
     steps:
-      - run: echo ${{ needs.build-matrix.outputs.version_matrix}}
+      - name : AA
+        run: |
+          param=${{ needs.build-matrix.outputs.version_matrix}}
+          echo param
+    #strategy:
+      #matrix:
+        #versions: $param
+
