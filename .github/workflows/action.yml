@@ -7,34 +7,51 @@ on:
       - test
 
 jobs:
-  build-matrix:
-    name: Build
+#   build-matrix:
+#     name: Build
+#     runs-on: ubuntu-latest
+#     outputs: 
+#       version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Read File
+#         id: set-matrix
+#         run: |
+#           import yaml
+#           with open('servers.yml') as file:
+#             data = yaml.load(file, Loader=yaml.FullLoader)
+#             vm_list=[]
+#             for i in data:
+#               vm_list.append(i["name"])
+#             print(f"::set-output name=version_matrix::{vm_list}")
+                      
+#         shell: python
+
+  matrix:
     runs-on: ubuntu-latest
-    outputs: 
-      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
-      - name: Read File
-        id: set-matrix
+
+      - id: set-matrix
         run: |
-          import yaml
-          with open('servers.yml') as file:
-            data = yaml.load(file, Loader=yaml.FullLoader)
-            vm_list=[]
-            for i in data:
-              vm_list.append(i["name"])
-            print(f"::set-output name=version_matrix::{vm_list} | jq .")
-            #run: echo "::set-output name=version_matrix::$(ls|jq -cnR '[inputs | select(length>0)]')"
-          
-        shell: python
+          matrix=$((
+            echo '{ "package" : ['
+            sed -n "/^REVDEP *:= */ { s///; p }" revdep-dev/Makefile | sed 's/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+            echo " ]}"
+          ) | jq -c .)
+          echo $matrix
+          echo $matrix | jq .
+          echo "::set-output name=matrix::$matrix"
 
   Test:
-    needs: build-matrix
+    needs: matrix
     name: test
     runs-on: ubuntu-latest
     #strategy:
       #matrix:
-        #versions: ${{fromJson(needs.build-matrix.outputs.version_matrix)}}
+        #versions: ${{fromJson(needs.matrix.outputs.matrix)}}
     steps:
       - run: echo ${{ needs.build-matrix.outputs.version_matrix}}
 
