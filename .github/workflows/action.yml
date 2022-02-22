@@ -7,29 +7,31 @@ on:
       - test
 
 jobs:
-  Test:
-    name: Test Salt
+  build-matrix:
+    name: Build
     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         image:
-#           - 'ubuntu2004'
-#           - 'centos7'
-#           - 'centos8'
+    outputs: 
+      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v2
       - name: Read File
+        id: set-matrix
         run: |
           import yaml
-          
           with open('servers.yml') as file:
             data = yaml.load(file, Loader=yaml.FullLoader)
-          vm_list=[]
-          for i in data:
-            vm_list.append(i["name"])
-          print(vm_list)
+            vm_list=[]
+            for i in data:
+              vm_list.append(i["name"])
+            print(f"::set-output name=version_matrix::{vm_list}")
           
         shell: python
+
+  Test:
+    needs: build-matrix
+    name: test
+    runs-on: ubuntu-latest
+    #strategy:
+      #matrix: ${{fromJson({"USER1":"10", "user2":"11", "USER3":"12"})}}
+    steps:
+      - run: echo ${{ needs.build-matrix.outputs.version_matrix}}
